@@ -73,18 +73,13 @@ namespace DirectorySearcher
             //
             redirectURI = Windows.Security.Authentication.Web.WebAuthenticationBroker.GetCurrentApplicationCallbackUri();
 
-            // ADAL for Windows Phone 8.1 builds AuthenticationContext instances throuhg a factory, which performs authority validation at creation time
-            authContext = AuthenticationContext.CreateAsync(authority).GetResults();
+            // TODO: Initialize the AuthenticationContext
         }
 
         #region IWebAuthenticationContinuable implementation
 
-        // This method is automatically invoked when the application is reactivated after an authentication interaction throuhg WebAuthenticationBroker.        
-        public async void ContinueWebAuthentication(WebAuthenticationBrokerContinuationEventArgs args)
-        {
-            // pass the authentication interaction results to ADAL, which will conclude the token acquisition operation and invoke the callback specified in AcquireTokenAndContinue.
-            await authContext.ContinueAcquireTokenAsync(args);
-        }
+        // TODO: Implement the ContinueWebAuthenticationInterface
+        
         #endregion
 
         /// <summary>
@@ -107,8 +102,7 @@ namespace DirectorySearcher
 
         private void SignOut()
         {
-            // Clear session state from the token cache.
-            authContext.TokenCache.Clear();
+            // TODO: Clear the token cache of all tokens
 
             // Reset UI elements
             SearchResults.ItemsSource = null;
@@ -127,37 +121,18 @@ namespace DirectorySearcher
                 return;
             }
 
-            // Try to get a token without triggering any user prompt. 
-            // ADAL will check whether the requested token is in the cache or can be obtained without user itneraction (e.g. via a refresh token).
-            AuthenticationResult result = await authContext.AcquireTokenSilentAsync(graphResourceId, clientId);
-            if (result != null && result.Status == AuthenticationStatus.Success)
-            {
-                // A token was successfully retrieved.
-                QueryGraph(result);
-            }
-            else
-            {
-                // Acquiring a token without user interaction was not possible. 
-                // Trigger an authentication experience and specify that once a token has been obtained the QueryGraph method should be called
-                authContext.AcquireTokenAndContinue(graphResourceId, clientId, redirectURI, QueryGraph);
-            }
+            // TODO: Acquire a token to call the Graph API
         }
 
         #endregion
 
         private async void QueryGraph(AuthenticationResult result)
         {
-            if (result.Status != AuthenticationStatus.Success)
-            {
-                MessageDialog dialog = new MessageDialog(string.Format("If the error continues, please contact your administrator.\n\nError: {0}\n\nError Description:\n\n{1}", result.Error, result.ErrorDescription), "Sorry, an error occurred while signing you in.");
-                await dialog.ShowAsync();
-            }
 
-            // Update the Page UI to represent the signed in user
-            ActiveUser.Text = result.UserInfo.DisplayableId;
+            // TODO: Attach the access token to the HTTP request
 
-            // Add the access token to the Authorization Header of the call to the Graph API, and call the Graph API.
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
+            // TODO: Display the user's Id on the main page.
+
             string graphRequest = String.Format(CultureInfo.InvariantCulture, "{0}{1}/users?api-version={2}&$filter=startswith(userPrincipalName, '{3}')", graphEndpoint, tenant, graphApiVersion, SearchTermText.Text);
             HttpResponseMessage response = await httpClient.GetAsync(graphRequest);
 
