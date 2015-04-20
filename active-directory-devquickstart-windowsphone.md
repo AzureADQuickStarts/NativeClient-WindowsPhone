@@ -110,8 +110,13 @@ private async void QueryGraph(AuthenticationResult result)
 {
     if (result.Status != AuthenticationStatus.Success)
     {
-        MessageDialog dialog = new MessageDialog(string.Format("If the error continues, please contact your administrator.\n\nError: {0}\n\nError Description:\n\n{1}", result.Error, result.ErrorDescription), "Sorry, an error occurred while signing you in.");
-        await dialog.ShowAsync();
+        // If the user canceled sign in, don't show an error.
+        if(result.Error != "access_denied")
+        {
+            MessageDialog dialog = new MessageDialog(string.Format("If the error continues, please contact your administrator.\n\nError: {0}\n\nError Description:\n\n{1}", result.Error, result.ErrorDescription), "Sorry, an error occurred while signing you in.");
+            await dialog.ShowAsync();
+        }
+        return;
     }
 
     // Add the access token to the Authorization Header of the call to the Graph API, and call the Graph API.
