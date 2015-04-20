@@ -149,8 +149,12 @@ namespace DirectorySearcher
         {
             if (result.Status != AuthenticationStatus.Success)
             {
-                MessageDialog dialog = new MessageDialog(string.Format("If the error continues, please contact your administrator.\n\nError: {0}\n\nError Description:\n\n{1}", result.Error, result.ErrorDescription), "Sorry, an error occurred while signing you in.");
-                await dialog.ShowAsync();
+                if (result.Error != "authentication_canceled")
+                {
+                    MessageDialog dialog = new MessageDialog(string.Format("If the error continues, please contact your administrator.\n\nError: {0}\n\nError Description:\n\n{1}", result.Error, result.ErrorDescription), "Sorry, an error occurred while signing you in.");
+                    await dialog.ShowAsync();
+                }
+                return;
             }
 
             // Update the Page UI to represent the signed in user
