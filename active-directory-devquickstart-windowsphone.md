@@ -18,7 +18,7 @@ To get started, [download a skeleton project](https://github.com/AzureADQuickSta
 ## *1. Register the Directory Searcher Application*
 To enable your app to get tokens, you’ll first need to register it in your Azure AD tenant and grant it permission to access the Azure AD Graph API:
 
--	Sign into the Azure Management Portal
+-	Sign into the [Azure Management Portal](https://manage.windowsazure.com)
 -	In the left hand nav, click on **Active Directory**
 -	Select a tenant in which to register the application.
 -	Click the **Applications** tab, and click **Add** in the bottom drawer.
@@ -67,7 +67,7 @@ public MainPage()
 }
 ```
 
-- Now locate the `Search(...)` method, which will be invoked when the user cliks the "Search" button in the app's UI.  This method makes a GET request to the Azure AD Graph API to query for users whose UPN begins with the given search term.  But in order to query the Graph API, you need to include an access_token in the `Authorization` header of the request - this is where ADAL comes in.
+- Now locate the `Search(...)` method, which will be invoked when the user cliks the "Search" button in the app's UI.  This method invoke the `QueryGraph(...)` method as a callback, which simply makes a GET request to the Azure AD Graph API to query for users whose UPN begins with the given search term.  But in order to query the Graph API, you need to include an access_token in the `Authorization` header of the request - this is where ADAL comes in.
 
 ```C#
 private async void Search(object sender, RoutedEventArgs e)
