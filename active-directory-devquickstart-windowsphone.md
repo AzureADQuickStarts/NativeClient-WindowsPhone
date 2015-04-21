@@ -18,7 +18,7 @@ To get started, [download a skeleton project](https://github.com/AzureADQuickSta
 ## *1. Register the Directory Searcher Application*
 To enable your app to get tokens, you’ll first need to register it in your Azure AD tenant and grant it permission to access the Azure AD Graph API:
 
--	Sign into the Azure Management Portal
+-	Sign into the [Azure Management Portal](https://manage.windowsazure.com)
 -	In the left hand nav, click on **Active Directory**
 -	Select a tenant in which to register the application.
 -	Click the **Applications** tab, and click **Add** in the bottom drawer.
